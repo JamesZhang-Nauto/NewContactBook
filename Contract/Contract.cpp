@@ -21,7 +21,6 @@ public:
 		emailID = "";
 		phoneNumber = "";
 	}
-
 	void createContact() 
 	{
 		cout <<"Enter first name:" << endl;
@@ -36,7 +35,6 @@ public:
 		cout << "Enter phone number" << endl;
 		cin >> phoneNumber;
 	}
-
 	void displayContact() 
 	{
 		cout <<"---------------Display contact information---------------" << endl;
@@ -73,11 +71,43 @@ public:
 			break;
 		default:
 			cout << "Wrong choice, please enter again..." << endl;
-			
+			editContact();
 		}
 	}
 
+	void save()
+	{
+		myfilewriter.open("contract.txt");
+		myfilewriter 	/*<< "First name: "*/ << firstName << endl
+			/*<< "Last name:"*/ << lastName << endl
+			/*<< "Email ID: "*/ << emailID << endl
+			/*<< "Phone Number: "*/ << phoneNumber << endl;
+		myfilewriter.close();
+	}
 
+	bool load()
+	{
+		cout << "Load contract..."<<endl;
+		myfilereader.open("contract.txt");
+		if(myfilereader.is_open())
+		{
+			if(!myfilereader.eof())
+			{
+				getline(myfilereader, firstName);
+				getline(myfilereader, lastName);
+				getline(myfilereader, emailID);
+				getline(myfilereader, phoneNumber);
+				cout << "Contract has been loaded" <<endl;
+				myfilereader.close();
+				return true;
+			}
+		}
+		else 
+		{
+			cout << "no contract exists, create a new one..." <<endl;
+			return false;
+		}
+	}
 };
 
 int main ()
@@ -85,9 +115,10 @@ int main ()
 
 	Contacts ourAddressBook;
 
-	cout <<"Creating a new contact" << endl;
+	/*cout <<"Creating a new contact" << endl;*/
 
-	ourAddressBook.createContact();
+	if (!ourAddressBook.load())
+		ourAddressBook.createContact();
 
 
 
@@ -96,18 +127,17 @@ int main ()
 		cout <<endl;
 		cout << "1. Display contact" << endl;
 		cout << "2. Edit contact" << endl;
-		cout << "3. Exit" << endl;
+		cout << "3. Save and Exit" << endl;
 		int choice;
 		cin >> choice;
 
 		switch(choice) {
-		case 1: 
-			ourAddressBook.displayContact();
+		case 1: ourAddressBook.displayContact();
 			break;
-		case 2: 
-			ourAddressBook.editContact();
+		case 2: ourAddressBook.editContact();
 			break;
 		case 3:
+			ourAddressBook.save();
 			exit(1);		
 		}
 	}
