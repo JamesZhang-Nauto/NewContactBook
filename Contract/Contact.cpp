@@ -14,7 +14,7 @@ class Contacts
 	ofstream myfilewriter;
 	ifstream myfilereader;
 
-	int index;
+	int index;	//alwasy points to the last item of contact
 public:
 	Contacts() 
 	{ //constructor
@@ -46,14 +46,14 @@ public:
 		displayContact();
 		int delIndex=0;
 		char conform;
-		do{
+		do{								//prevent crash
 			cout << "which one? (1-" << index << ")  "  ;
 			cin.clear();
 			cin.sync();  
 			cin >> delIndex;
 		}while(cin.fail());
 
-		do{
+		do{							//prevent crash
 			cout << "Are you sure? (Y/N) "  ;
 			cin.clear();
 			cin.sync();  
@@ -64,7 +64,7 @@ public:
 		if(conform=='Y'||conform=='y')
 		{
 			delIndex--;
-			for(int i=delIndex; i<index-1; i++)
+			for(int i=delIndex; i<index-1; i++) //move the following items, in order to "erase" the item
 			{
 				firstName[i] = firstName[i+1];
 				lastName[i] = lastName[i];
@@ -82,26 +82,17 @@ public:
 
 	void displayContact() 
 	{
-			cout << setw (12)  << " First Name" << " | " 
-				 << setw (12)  << " Last Name " << " | " 
-				 << setw (20)  << " Email ID" << " | " 
-				 << setw (14)  << " Phone Number" << endl;
-			cout << "------------------------------------------------------------------------"<<endl;
+		cout << setw (12)  << " First Name" << " | " 
+			<< setw (12)  << " Last Name " << " | " 
+			<< setw (20)  << " Email ID" << " | " 
+			<< setw (14)  << " Phone Number" << endl;
+		cout << "------------------------------------------------------------------------"<<endl;
 		for(int i=0; i<index; i++)
 		{
-			//cout <<"---------------Display contanct information---------------" << endl;
-			//cout << "1. First name: " << firstName[i] << endl;
-			//cout << "2. Last name:" << lastName[i] << endl;
-			//cout << "3. Email ID: " << emailID[i] << endl;
-			//cout << "4. Phone Number: " << phoneNumber[i] << endl
-			//	 <<"----------------------------------------------------------" << endl <<endl;
-
-
-
 			cout << setw (12)  << firstName[i] << " | " 
-				 << setw (12)  << lastName[i]  << " | " 
-				 << setw (20)  << emailID[i]   << " | " 
-				 << setw (14)  << phoneNumber[i] << endl;
+				<< setw (12)  << lastName[i]  << " | " 
+				<< setw (20)  << emailID[i]   << " | " 
+				<< setw (14)  << phoneNumber[i] << endl;
 		}
 	}
 
@@ -110,7 +101,7 @@ public:
 		int editItem =0;
 		displayContact();
 		int editIndex=0;
-		do{
+		do{  //prevent crash
 			cout << "which one? (1-" << index << ")  " ;
 			cin.clear();
 			cin.sync();  
@@ -118,7 +109,7 @@ public:
 		}while(cin.fail());
 
 		editIndex--;
-		do{
+		do{  //prevent crash
 			cout << endl<< "Chooce one that you want to edit (1,First Name; 2,Last Name; 3,email; 4, Phone#): ";
 			cin.clear();
 			cin.sync();  
@@ -159,13 +150,13 @@ public:
 		}while(cin.fail());
 		if(conform=='Y'||conform=='y')
 		{
-			myfilewriter.open("contract.txt");
+			myfilewriter.open("contact.txt");
 			for(int i=0; i<index; i++)
 			{
 				myfilewriter 	/*<< "First name: "*/ << firstName[i] << endl
-				/*<< "Last name:"*/ << lastName[i] << endl
-				/*<< "Email ID: "*/ << emailID[i] << endl
-				/*<< "Phone Number: "*/ << phoneNumber[i] << endl;
+					/*<< "Last name:"*/ << lastName[i] << endl
+					/*<< "Email ID: "*/ << emailID[i] << endl
+					/*<< "Phone Number: "*/ << phoneNumber[i] << endl;
 			}
 			myfilewriter.close();
 		}
@@ -173,8 +164,8 @@ public:
 
 	bool load()
 	{
-		cout << "Load contract..."<<endl;
-		myfilereader.open("contract.txt");
+		cout << "Loading contact..."<<endl;
+		myfilereader.open("contact.txt");
 		string d="";
 		if(myfilereader.is_open())
 		{
@@ -187,13 +178,13 @@ public:
 				index++;
 			}
 			index--;
-			cout << index <<" contract has been loaded" <<endl;
+			cout << index <<" contact has been loaded!" <<endl;
 			myfilereader.close();
 			return true;
 		}
 		else 
 		{
-			cout << "No contract exists, create a new one..." <<endl;
+			cout << "No contact exists, create a new one..." <<endl;
 			return false;
 		}
 	}
@@ -205,19 +196,19 @@ int main ()
 	Contacts ourAddressBook;
 	int choice;
 
-	if (!ourAddressBook.load())
+	if (!ourAddressBook.load())	//load contact file first. if return ture, don't need to create new contact; if false, call createContact();
 		ourAddressBook.createContact(0);
 
 	while(1) 
 	{
 		cout <<endl;
-		do{
+		do{			//prevent crash
 			cout << "1. Display contact" << endl;
 			cout << "2. Edit contact" << endl;
 			cout << "3. New contact" <<endl;
 			cout << "4. Delete contact" <<endl;
 			cout << "5. Save and Exit" << endl;
-		
+
 			cin.clear();
 			cin.sync();  
 			cin >> choice;
